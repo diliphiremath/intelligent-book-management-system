@@ -1,10 +1,11 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.book import Book, BookCreate
+from app.schemas.book import Book, BookCreate, SummaryReview
 from app.schemas.review import Review, ReviewCreate
 from app.crud import book as crud_book, review as crud_review
-from app.database.db import SessionLocal
+from app.services import book as service_book
+from app.config.db import SessionLocal
 
 router = APIRouter()
 
@@ -47,3 +48,7 @@ def create_review(book_id: int, review: ReviewCreate, db: Session = Depends(get_
 @router.get("/books/{book_id}/reviews", response_model=List[Review])
 def read_reviews(book_id: int, db: Session = Depends(get_db)):
     return crud_review.get_reviews(db, book_id)
+
+@router.get("/books/{book_id}/summary", response_model=SummaryReview)
+def read_summary_reviews(book_id: int, db: Session = Depends(get_db)):
+    return service_book.get_summary_reviews(db, book_id)

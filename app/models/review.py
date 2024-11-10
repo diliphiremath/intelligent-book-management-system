@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey
 from sqlalchemy.orm import relationship
-from app.database.db import Base
+from app.config.db import Base
 
 
 class Review(Base):

@@ -15,3 +15,7 @@ class Book(BookBase):
     id: int
     class Config:
         orm_mode = True
+
+class SummaryReview(BaseModel):
+    summary: str
+    rating: float
