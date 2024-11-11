@@ -1,8 +1,10 @@
+from app.services.llm import generate_summary
 from sqlalchemy.orm import Session
 from app.models.book import Book
 from app.schemas.book import BookCreate
 
 def create_book(db: Session, book: BookCreate):
+    book.summary = generate_summary(book)["summary"]
     db_book = Book(**book.dict())
     db.add(db_book)
     db.commit()
