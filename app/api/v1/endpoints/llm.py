@@ -3,15 +3,6 @@ from app.services.auth import authenticate
 from fastapi import APIRouter, Depends, HTTPException
 from app.services import llm
 from pydantic import BaseModel
-from app.config.db import SessionLocal
-from sqlalchemy.orm import Session
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 class Recommendation(BaseModel):
     recommendation: str

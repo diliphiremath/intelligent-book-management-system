@@ -1,26 +1,37 @@
 from app.services.llm import generate_summary
-from sqlalchemy.orm import Session
 from app.models.book import Book
 from app.schemas.book import BookCreate
+from sqlalchemy.future import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-def create_book(db: Session, book: BookCreate):
+async def create_book(db: AsyncSession, book: BookCreate):
     book.summary = generate_summary(book)["summary"]
     db_book = Book(**book.dict())
     db.add(db_book)
-    db.commit()
-    db.refresh(db_book)
+    await db.commit()
+    await db.refresh(db_book)
     return db_book
 
-def get_book(db: Session, book_id: int):
-    return db.query(Book).filter(Book.id == book_id).first()
+async def get_book(db: AsyncSession, book_id: int):
+    result = await db.execute(select(Book).where(Book.id == book_id))
+    return result.scalars().first()
 
-def get_books(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Book).offset(skip).limit(limit).all()
+async def get_books(db: AsyncSession):
+    result = await db.execute(select(Book))
+    return result.scalars().all()
 
-def update_book(db: Session, book_id: int, book_data: dict):
-    db.query(Book).filter(Book.id == book_id).update(book_data)
-    db.commit()
+async def update_book(db: AsyncSession, book_id: int, update_data: dict):
+    book = await get_book(db, book_id)
+    if book:
+        for key, value in update_data.items():
+            setattr(book, key, value)
+        await db.commit()
+        await db.refresh(book)
+    return book
     
-def delete_book(db: Session, book_id: int):
-    db.query(Book).filter(Book.id == book_id).delete()
-    db.commit()
+async def delete_book(db: AsyncSession, book_id: int):
+    book = await get_book(db, book_id)
+    if book:
+        await db.delete(book)
+        await db.commit()
+    return book
