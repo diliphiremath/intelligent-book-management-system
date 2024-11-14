@@ -12,7 +12,7 @@ A RESTful API built with FastAPI, PostgreSQL, designed to manage books, reviews 
 - **Environment-based Configuration**: Environment variables control app settings and database configuration.
 
 ## Prerequisites
-Python 3.10+: For local development without Docker.
+Python 3.10+
 Postgres DB: https://www.postgresql.org/
 Groq API: https://groq.com/
 
