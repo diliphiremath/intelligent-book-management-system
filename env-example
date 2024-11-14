@@ -1,0 +1,4 @@
+DATABASE_URL = "postgresql+asyncpg://admin:qwerty@localhost:5432/bmsdb2"
+GROQ_API_KEY = ""
+MODEL = "llama3-8b-8192"
+LLM_DB = "postgresql+psycopg2://admin:qwerty@localhost:5432/bmsdb2"
