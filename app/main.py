@@ -6,7 +6,7 @@ import asyncio
 # Initialize the app
 app = FastAPI()
 
-# # Event handler to create tables on startup
+# Event handler to create tables on startup
 # @app.on_event("startup")
 # async def startup_event():
 #     async with engine.begin() as conn:
